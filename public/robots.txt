@@ -1,0 +1,34 @@
+User-agent: *
+Allow: /
+
+# 重要頁面
+Allow: /
+Allow: /services
+Allow: /booking
+Allow: /contact
+
+# 禁止訪問的目錄
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /*.xml$
+
+# 網站地圖位置
+Sitemap: https://www.proemservices60.com/sitemap.xml
+
+# 爬取延遲（毫秒）
+Crawl-delay: 1
+
+# 針對特定搜索引擎的設置
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2
+

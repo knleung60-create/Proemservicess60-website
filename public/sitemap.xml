@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- 首頁 -->
+  <url>
+    <loc>https://www.proemservices60.com/</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- 服務項目頁面 -->
+  <url>
+    <loc>https://www.proemservices60.com/#services</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- 預約服務頁面 -->
+  <url>
+    <loc>https://www.proemservices60.com/#booking</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 聯絡我們頁面 -->
+  <url>
+    <loc>https://www.proemservices60.com/#contact</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- 個別服務頁面 -->
+  <url>
+    <loc>https://www.proemservices60.com/#service/professional-inspection</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.proemservices60.com/#service/water-meter-application</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.proemservices60.com/#service/village-water-supply</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.proemservices60.com/#service/water-meter-separation</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.proemservices60.com/#service/saltwater-toilet</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.proemservices60.com/#service/wr1-certification</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.proemservices60.com/#service/water-safety-application</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.proemservices60.com/#service/safety-officer</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.proemservices60.com/#service/confined-space</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.proemservices60.com/#service/environmental-license</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.proemservices60.com/#service/fiou-audit</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.proemservices60.com/#service/scaffold-form</loc>
+    <lastmod>2025-10-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+</urlset>
+
