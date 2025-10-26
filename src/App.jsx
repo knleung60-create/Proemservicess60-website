@@ -1308,7 +1308,8 @@ function App() {
                 <div className="flex items-center justify-center sm:justify-start space-x-2">
                   <Mail className="w-4 h-4" />
                   <span>proemservice60@gmail.com</span>
-                  <div>sales@proemservices60.com</div>
+                  </div>
+                  <span>sales@proemservices60.com</span>
                 </div>
                 <div className="flex items-start justify-center sm:justify-start space-x-2">
                   <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
@@ -1323,7 +1324,7 @@ function App() {
 
           <div className="border-t border-gray-700 mt-8 pt-6 text-center">
             <p className="text-sm text-gray-400">
-              © 2024 專業機電服務有限公司，版權所有。
+              © 2025 專業機電服務有限公司，版權所有。
             </p>
           </div>
         </div>
