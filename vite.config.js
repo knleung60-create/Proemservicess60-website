@@ -7,7 +7,7 @@ import { fileURLToPath, URL } from 'url'
 export default defineConfig({
   
   // 確保 / 開頭和 / 結尾，並與你的儲存庫名稱 100% 一致
-  base: '/Proemservicess60-website/',
+  base: '/',
 
   plugins: [react(), tailwindcss()],
   
