@@ -1,58 +1,65 @@
-# 專門用於 Vite 專案部署到 GitHub Pages 的工作流程
+# 專門用於 Vite (使用 pnpm) 專案部署到 GitHub Pages 的工作流程
 name: Deploy Vite Project to Pages
 
 on:
-  # 在推送到 'main' 分支時觸發
   push:
     branches: ["main"]
-
-  # 允許你手動在 Actions 標籤頁觸發
   workflow_dispatch:
 
-# 設定 GITHUB_TOKEN 的權限
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 只允許一個並行的部署
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # 建置工作 (Build job)
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # 1. 安裝 Node.js
+      
+      # 1. 安裝 pnpm (!!! 關鍵步驟 !!!)
+      # 我們使用 pnpm/action-setup 來安裝 pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          # 讀取你 package.json 裡的 pnpm 版本
+          run_install: false 
+          
+      # 2. 安裝 Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20 # 保持 20 即可
-          cache: 'npm'
-      # 2. 安裝依賴套件
+          node-version: 20
+          # 告訴 Node.js 要快取 pnpm 的依賴
+          cache: 'pnpm' 
+
+      # 3. 安裝依賴 (!!! 關鍵步驟 !!!)
       - name: Install dependencies
-        run: npm ci
-      # 3. 執行「建置」 (!!! 關鍵步驟 !!!)
-      # 這裡會讀取 vite.config.js 的 'base' 設定來打包
+        # 使用 pnpm install (這會讀取 pnpm-lock.yaml)
+        run: pnpm install --frozen-lockfile 
+        
+      # 4. 執行「建置」 (!!! 關鍵步驟 !!!)
       - name: Build
-        run: npm run build
-      # 4. 準備上傳成品
+        # 使用 pnpm run build
+        run: pnpm run build 
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      # 5. 上傳「建置好」的 'dist' 資料夾 (!!! 關鍵步驟 !!!)
+        
+      # 5. 上傳 'dist' 資料夾 (這部分不變)
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # 只上傳 'dist' 資料夾，而不是 '.' (整個專案)
           path: './dist'
           
-  # 部署工作 (Deploy job)
+  # 部署工作 (Deploy job) - 這部分完全不變
   deploy:
-    needs: build # 必須等 'build' 工作成功後才執行
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
