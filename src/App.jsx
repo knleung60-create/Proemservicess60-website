@@ -1112,7 +1112,7 @@ function App() {
                     <div>
                       <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">電郵</h3>
                       <p className="text-base sm:text-lg text-blue-600 font-medium">proemservice60@gmail.com</p>
-                      <p >sales@proemservices60.com</p>
+                      <p className="text-base sm:text-lg text-blue-600 font-medium">sales@proemservices60.com</p>
                       <p className="text-sm text-blue-600 font-medium">專業諮詢信箱</p>
                     </div>
                   </div>
@@ -1308,7 +1308,7 @@ function App() {
                 <div className="flex items-center justify-center sm:justify-start space-x-2">
                   <Mail className="w-4 h-4" />
                   <span>proemservice60@gmail.com</span>
-                  <span>sales@proemservices60.com</span>
+                  <p>sales@proemservices60.com</p>
                 </div>
                 <div className="flex items-start justify-center sm:justify-start space-x-2">
                   <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
