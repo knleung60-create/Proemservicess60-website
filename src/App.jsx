@@ -1112,6 +1112,7 @@ function App() {
                     <div>
                       <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">電郵</h3>
                       <p className="text-base sm:text-lg text-blue-600 font-medium">proemservice60@gmail.com</p>
+                      <p >sales@proemservices60.com</p>
                       <p className="text-sm text-blue-600 font-medium">專業諮詢信箱</p>
                     </div>
                   </div>
