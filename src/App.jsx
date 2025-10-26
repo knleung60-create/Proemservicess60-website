@@ -1037,8 +1037,8 @@ function App() {
               {[
                 {
                   icon: <Upload className="w-8 sm:w-12 h-8 sm:h-12 text-blue-600" />,
-                  title: '文件上傳',
-                  description: '支援上傳相關文件，如樓宇圖則、身份證明等'
+                  title: '免費資詢',
+                  description: '各類工程申請，工程工作，聯營合作等'
                 },
                 {
                   icon: <CreditCard className="w-8 sm:w-12 h-8 sm:h-12 text-blue-600" />,
@@ -1308,7 +1308,7 @@ function App() {
                 <div className="flex items-center justify-center sm:justify-start space-x-2">
                   <Mail className="w-4 h-4" />
                   <span>proemservice60@gmail.com</span>
-                  <p>sales@proemservices60.com</p>
+                  <div>sales@proemservices60.com</div>
                 </div>
                 <div className="flex items-start justify-center sm:justify-start space-x-2">
                   <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
