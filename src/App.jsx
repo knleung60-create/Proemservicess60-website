@@ -1308,8 +1308,7 @@ function App() {
                 <div className="flex items-center justify-center sm:justify-start space-x-2">
                   <Mail className="w-4 h-4" />
                   <span>proemservice60@gmail.com</span>
-                  </div>
-                  <span>sales@proemservices60.com</span>
+                  <div>sales@proemservices60.com</div>
                 </div>
                 <div className="flex items-start justify-center sm:justify-start space-x-2">
                   <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
