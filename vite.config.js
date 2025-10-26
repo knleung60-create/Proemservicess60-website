@@ -9,7 +9,7 @@ export default defineConfig({
   
   // 1. 為了 GitHub Pages 部署，我們新增了 'base' 屬性
   // 確保 / 開頭和 / 結尾
-  base: '/Proservices60-website/',
+  base: '/Proemservices60-website/',
 
   plugins: [react(), tailwindcss()],
   
