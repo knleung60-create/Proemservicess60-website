@@ -1,43 +1,63 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+# 專門用於 Vite 專案部署到 GitHub Pages 的工作流程
+name: Deploy Vite Project to Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # 在推送到 'main' 分支時觸發
   push:
     branches: ["main"]
 
-  # Allows you to run this workflow manually from the Actions tab
+  # 允許你手動在 Actions 標籤頁觸發
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# 設定 GITHUB_TOKEN 的權限
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# 只允許一個並行的部署
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
+  # 建置工作 (Build job)
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # 1. 安裝 Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 # 保持 20 即可
+          cache: 'npm'
+      # 2. 安裝依賴套件
+      - name: Install dependencies
+        run: npm ci
+      # 3. 執行「建置」 (!!! 關鍵步驟 !!!)
+      # 這裡會讀取 vite.config.js 的 'base' 設定來打包
+      - name: Build
+        run: npm run build
+      # 4. 準備上傳成品
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      # 5. 上傳「建置好」的 'dist' 資料夾 (!!! 關鍵步驟 !!!)
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # 只上傳 'dist' 資料夾，而不是 '.' (整個專案)
+          path: './dist'
+          
+  # 部署工作 (Deploy job)
   deploy:
+    needs: build # 必須等 'build' 工作成功後才執行
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
