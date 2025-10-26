@@ -1324,7 +1324,7 @@ function App() {
 
           <div className="border-t border-gray-700 mt-8 pt-6 text-center">
             <p className="text-sm text-gray-400">
-              © 2025 專業機電服務有限公司，版權所有。
+              © 2025 匠一機電工程有限公司，版權所有。
             </p>
           </div>
         </div>
