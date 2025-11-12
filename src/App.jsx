@@ -337,7 +337,7 @@ function App() {
                   <Wrench className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                 </div>
                 <span className="ml-2 sm:ml-3 text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  匠一機電工程
+                  匠一機電工程有限公司
                 </span>
               </div>
             </div>
@@ -414,7 +414,7 @@ function App() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                 <div className="text-center lg:text-left">
                   <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-4 sm:mb-6 leading-tight">
-                    專業機電
+                    匠一機電工程
                     <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">
                       服務
                     </span>
