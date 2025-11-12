@@ -337,7 +337,7 @@ function App() {
                   <Wrench className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                 </div>
                 <span className="ml-2 sm:ml-3 text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  專業機電服務
+                  匠一機電工程
                 </span>
               </div>
             </div>
