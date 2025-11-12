@@ -1307,14 +1307,13 @@ function App() {
                 </div>
                 <div className="flex items-center justify-center sm:justify-start space-x-2">
                   <Mail className="w-4 h-4" />
-                  <div>proemservice60@gmail.com</div>
                   <div>sales@proemservices60.com</div>
                 </div>
                 <div className="flex items-start justify-center sm:justify-start space-x-2">
                   <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
                   <div>
-                    <div>香港九龍觀塘道123號</div>
-                    <div>專業大廈15樓A室</div>
+                    <div>香港上環干諾道西20號</div>
+                    <div>中英大廈1403室</div>
                   </div>
                 </div>
               </div>
