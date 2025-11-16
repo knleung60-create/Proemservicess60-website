@@ -224,7 +224,7 @@ function App() {
     setSubmitError('')
     
     try {
-      const response = await fetch('https://proemservices60.com/api/booking', {
+      const response = await fetch('https://www.proemservices60.com/api/booking', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
