@@ -1,0 +1,12 @@
+services:
+  enquiry-service:
+    build: ./server
+    container_name: proem-enquiry-service
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8787:8787"
+    volumes:
+      - ./records:/app/records
+

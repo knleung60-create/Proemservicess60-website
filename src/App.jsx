@@ -34,14 +34,25 @@ import {
 } from 'lucide-react'
 import mepInspectionImg from './assets/mep-inspection.jpg'
 import waterMeterImg from './assets/water-meter.jpg'
-import villageWaterImg from './assets/village-water.jpg'
+import villageWaterImg from './assets/hong-kong-village-water-supply.png'
 import saltwaterToiletImg from './assets/saltwater-toilet.jpg'
 import waterSafetyImg from './assets/water-safety.png'
+import companyLogoImg from './assets/company-logo.jpeg'
+import safetyEnvironmentalDocumentsImg from './assets/safety-environmental-documents.png'
+import safetyEnvironmentalConsultationImg from './assets/safety-environmental-consultation.png'
+import fiouSafetyAuditImg from './assets/fiou-safety-audit.png'
+import mobileAluminiumScaffoldInspectionImg from './assets/mobile-aluminium-scaffold-inspection.png'
+import confinedSpaceServiceImg from './assets/confined-space-service.png'
+import wr1ElectricalInspectionImg from './assets/wr1-electrical-inspection.png'
+import environmentalPermitApplicationImg from './assets/environmental-permit-application.png'
+import hongKongProfessionalHomeInspectionImg from './assets/hong-kong-professional-home-inspection.png'
+import hongKongPartTimeSafetyEnvironmentalOfficerImg from './assets/hong-kong-part-time-safety-environmental-officer.png'
 import './App.css'
+
+const enquiryApiUrl = import.meta.env.VITE_ENQUIRY_API_URL || '/api/enquiries'
 
 function App() {
   const [activeSection, setActiveSection] = useState('home')
-  const [selectedService, setSelectedService] = useState(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [bookingForm, setBookingForm] = useState({
     name: '',
@@ -75,7 +86,7 @@ function App() {
       description: '全面的樓宇結構及機電系統檢查，確保安全合規',
       features: ['結構安全檢查', '機電系統評估', '詳細報告', '專業建議'],
       icon: <HardHat className="w-8 h-8" />,
-      image: mepInspectionImg,
+      image: hongKongProfessionalHomeInspectionImg,
       category: '機電工程'
     },
     {
@@ -125,7 +136,7 @@ function App() {
       description: '專業工程師簽發WR1證書及相關文件',
       features: ['現場檢查', '技術評估', '證書簽發', '政府提交'],
       icon: <FileText className="w-8 h-8" />,
-      image: mepInspectionImg,
+      image: wr1ElectricalInspectionImg,
       category: '機電工程'
     },
     {
@@ -145,7 +156,7 @@ function App() {
       description: '提供專業的兼職安全主任及環保主任服務',
       features: ['安全監督', '環保監察', '法規查核', '報告編制'],
       icon: <HardHat className="w-8 h-8" />,
-      image: mepInspectionImg,
+      image: hongKongPartTimeSafetyEnvironmentalOfficerImg,
       category: '安全服務'
     },
     {
@@ -155,7 +166,7 @@ function App() {
       description: '提供FIOU安全審核(Safety Audit)及安全查核(Safety Review)服務',
       features: ['安全審核', '風險評估', '合規檢查', '改善建議'],
       icon: <ClipboardCheck className="w-8 h-8" />,
-      image: mepInspectionImg,
+      image: fiouSafetyAuditImg,
       category: '安全服務'
     },
     {
@@ -165,7 +176,7 @@ function App() {
       description: '合資格人士簽發流動鋁架表格(五)',
       features: ['現場檢查', '安全評估', '表格簽發', '合規認證'],
       icon: <Settings className="w-8 h-8" />,
-      image: mepInspectionImg,
+      image: mobileAluminiumScaffoldInspectionImg,
       category: '安全服務'
     },
     {
@@ -175,7 +186,7 @@ function App() {
       description: '提供密閉空間合資格人士及器具租借服務',
       features: ['合資格人士', '試氣錶租借', '安全器具', '現場監督'],
       icon: <AlertTriangle className="w-8 h-8" />,
-      image: mepInspectionImg,
+      image: confinedSpaceServiceImg,
       category: '安全服務'
     },
     {
@@ -185,7 +196,7 @@ function App() {
       description: '協助地盤向環保處申請各類牌照及相關認證',
       features: ['污水牌申請', '噪音工作許可證(CNP)', '化學廢料登記', '空氣監測'],
       icon: <Leaf className="w-8 h-8" />,
-      image: waterSafetyImg,
+      image: environmentalPermitApplicationImg,
       category: '環保服務'
     },
     {
@@ -195,7 +206,7 @@ function App() {
       description: '制定法例所要求之安全文件/環保文件',
       features: ['風險評估', '安全巡查報告', '意外調查報告', '表格3A/2A'],
       icon: <FileText className="w-8 h-8" />,
-      image: mepInspectionImg,
+      image: safetyEnvironmentalDocumentsImg,
       category: '環保服務'
     },
     {
@@ -205,7 +216,7 @@ function App() {
       description: '出席業主/則師/顧問會議及提供專業諮詢',
       features: ['會議出席', '進度匯報', '安全巡查', '專業諮詢'],
       icon: <Users className="w-8 h-8" />,
-      image: mepInspectionImg,
+      image: safetyEnvironmentalConsultationImg,
       category: '環保服務'
     }
   ]
@@ -224,12 +235,15 @@ function App() {
     setSubmitError('')
     
     try {
-      const response = await fetch('https://www.proemservices60.com/api/booking', {
+      const response = await fetch(enquiryApiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(bookingForm)
+        body: JSON.stringify({
+          type: 'booking',
+          ...bookingForm
+        })
       })
       
       const data = await response.json()
@@ -272,18 +286,11 @@ function App() {
     
     try {
       const submitData = {
+        type: 'contact',
         ...contactForm,
-        timestamp: new Date().toLocaleString('zh-HK', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit'
-        })
       }
       
-      const response = await fetch('https://kkh7ikc789gx.manus.space/api/contact', {
+      const response = await fetch(enquiryApiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -327,16 +334,18 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile-Optimized Navigation */}
-      <nav className="bg-white/95 backdrop-blur-sm shadow-lg sticky top-0 z-50 border-b border-blue-100">
+      <nav className="bg-white/95 backdrop-blur-sm shadow-lg sticky top-0 z-50 border-b border-zinc-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             {/* Logo */}
             <div className="flex items-center">
               <div className="flex-shrink-0 flex items-center">
-                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 rounded-lg">
-                  <Wrench className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-                </div>
-                <span className="ml-2 sm:ml-3 text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                <img
+                  src={companyLogoImg}
+                  alt="匠一機電工程有限公司標誌"
+                  className="h-10 w-10 sm:h-11 sm:w-11 rounded-full object-cover shadow-sm"
+                />
+                <span className="ml-2 sm:ml-3 text-lg sm:text-xl font-bold bg-gradient-to-r from-zinc-950 to-zinc-700 bg-clip-text text-transparent">
                   匠一機電工程有限公司
                 </span>
               </div>
@@ -355,8 +364,8 @@ function App() {
                   onClick={() => handleSectionChange(key)}
                   className={`px-3 lg:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                     activeSection === key 
-                      ? 'text-blue-600 bg-blue-50 shadow-sm' 
-                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                      ? 'text-zinc-900 bg-zinc-100 shadow-sm'
+                      : 'text-gray-700 hover:text-zinc-900 hover:bg-zinc-100'
                   }`}
                 >
                   {label}
@@ -368,7 +377,7 @@ function App() {
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                className="p-2 rounded-lg text-gray-700 hover:text-zinc-900 hover:bg-zinc-100 transition-colors"
               >
                 {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
@@ -390,8 +399,8 @@ function App() {
                     onClick={() => handleSectionChange(key)}
                     className={`w-full text-left px-3 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
                       activeSection === key 
-                        ? 'text-blue-600 bg-blue-50 shadow-sm' 
-                        : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                        ? 'text-zinc-900 bg-zinc-100 shadow-sm'
+                        : 'text-gray-700 hover:text-zinc-900 hover:bg-zinc-100'
                     }`}
                   >
                     {label}
@@ -407,33 +416,32 @@ function App() {
       {activeSection === 'home' && (
         <div>
           {/* Hero Section - Mobile Optimized */}
-          <section className="relative bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-700 text-white py-12 sm:py-16 lg:py-24 overflow-hidden">
+          <section className="relative bg-gradient-to-r from-zinc-950 via-zinc-800 to-black text-white py-12 sm:py-16 lg:py-24 overflow-hidden">
             <div className="absolute inset-0 bg-black/20"></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-black/90 to-transparent"></div>
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                 <div className="text-center lg:text-left">
                   <h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold mb-4 sm:mb-6 leading-tight">
                     匠一機電工程
-                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">
+                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-zinc-200 to-white">
                       服務
                     </span>
                   </h1>
-                  <p className="text-lg sm:text-xl lg:text-2xl mb-6 sm:mb-8 text-blue-100 leading-relaxed">
+                  <p className="text-lg sm:text-xl lg:text-2xl mb-6 sm:mb-8 text-zinc-200 leading-relaxed">
                     一站式機電工程解決方案<br />
                     專業可靠，服務至上
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                     <Button 
                       onClick={() => handleSectionChange('services')}
-                      className="bg-white text-blue-600 hover:bg-blue-50 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="bg-white text-zinc-900 hover:bg-zinc-100 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       查看服務項目
                     </Button>
                     <Button 
                       onClick={() => handleSectionChange('booking')}
-                      variant="outline"
-                      className="border-white text-white hover:bg-white hover:text-blue-600 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl transition-all duration-300"
+                      className="bg-zinc-900 text-white border border-zinc-500 hover:bg-zinc-800 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl transition-all duration-300"
                     >
                       立即預約
                     </Button>
@@ -466,7 +474,7 @@ function App() {
                 {stats.map((stat, index) => (
                   <div key={index} className="text-center">
                     <div className="flex justify-center mb-3 sm:mb-4">
-                      <div className="bg-blue-100 p-3 sm:p-4 rounded-full text-blue-600">
+                      <div className="bg-zinc-100 p-3 sm:p-4 rounded-full text-zinc-900">
                         {stat.icon}
                       </div>
                     </div>
@@ -497,17 +505,17 @@ function App() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                 {[
                   {
-                    icon: <Award className="w-8 h-8 text-blue-600" />,
+                    icon: <Award className="w-8 h-8 text-zinc-900" />,
                     title: '專業認證',
                     description: '持有相關專業資格及政府認可證書，確保服務質量'
                   },
                   {
-                    icon: <Zap className="w-8 h-8 text-blue-600" />,
+                    icon: <Zap className="w-8 h-8 text-zinc-900" />,
                     title: '快速響應',
                     description: '24小時內回覆，緊急情況即時處理，不讓您久等'
                   },
                   {
-                    icon: <CreditCard className="w-8 h-8 text-blue-600" />,
+                    icon: <CreditCard className="w-8 h-8 text-zinc-900" />,
                     title: '收費彈性',
                     description: '可按次收費或按月收費，靈活配合您的需求'
                   }
@@ -515,7 +523,7 @@ function App() {
                   <Card key={index} className="text-center hover:shadow-lg transition-shadow duration-300">
                     <CardContent className="p-6 sm:p-8">
                       <div className="flex justify-center mb-4">
-                        <div className="bg-blue-100 p-3 rounded-full">
+                        <div className="bg-zinc-100 p-3 rounded-full">
                           {feature.icon}
                         </div>
                       </div>
@@ -551,19 +559,19 @@ function App() {
                     title: '機電工程',
                     description: '專業驗樓、水錶申請、供水系統等',
                     icon: <Wrench className="w-8 h-8" />,
-                    color: 'from-blue-500 to-blue-600'
+                    color: 'from-zinc-800 to-zinc-950'
                   },
                   {
                     title: '安全服務',
                     description: '安全主任、FIOU審核、密閉空間等',
                     icon: <HardHat className="w-8 h-8" />,
-                    color: 'from-green-500 to-green-600'
+                    color: 'from-zinc-700 to-zinc-900'
                   },
                   {
                     title: '環保服務',
                     description: '環保主任、牌照申請、文件制定等',
                     icon: <Leaf className="w-8 h-8" />,
-                    color: 'from-purple-500 to-purple-600'
+                    color: 'from-zinc-600 to-zinc-800'
                   }
                 ].map((category, index) => (
                   <Card key={index} className="hover:shadow-lg transition-all duration-300 cursor-pointer">
@@ -593,7 +601,7 @@ function App() {
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute top-4 left-4">
-                        <Badge className="bg-white text-blue-600 font-semibold">
+                        <Badge className="bg-white text-zinc-900 font-semibold">
                           {service.category}
                         </Badge>
                       </div>
@@ -601,7 +609,7 @@ function App() {
                     <CardContent className="p-4 sm:p-6">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center space-x-2">
-                          <div className="text-blue-600">
+                          <div className="text-zinc-900">
                             {service.icon}
                           </div>
                           <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
@@ -609,7 +617,7 @@ function App() {
                           </h3>
                         </div>
                         <div className="text-right">
-                          <div className="text-lg sm:text-xl font-bold text-blue-600">
+                          <div className="text-lg sm:text-xl font-bold text-zinc-900">
                             {service.price}
                           </div>
                         </div>
@@ -627,7 +635,7 @@ function App() {
                       </div>
                       <Button 
                         onClick={() => handleSectionChange('booking')}
-                        className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-2 sm:py-3 rounded-lg transition-all duration-300"
+                        className="w-full bg-gradient-to-r from-zinc-950 to-zinc-700 hover:from-black hover:to-zinc-800 text-white py-2 sm:py-3 rounded-lg transition-all duration-300"
                       >
                         立即預約
                         <ArrowRight className="ml-2 w-4 h-4" />
@@ -641,7 +649,7 @@ function App() {
                 <Button 
                   onClick={() => handleSectionChange('services')}
                   variant="outline"
-                  className="px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300"
+                  className="px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl border-2 border-zinc-900 text-zinc-900 hover:bg-zinc-900 hover:text-white transition-all duration-300"
                 >
                   查看所有服務
                   <ArrowRight className="ml-2 w-5 h-5" />
@@ -696,7 +704,7 @@ function App() {
                   <Card key={index} className="text-center hover:shadow-lg transition-shadow duration-300">
                     <CardContent className="p-4 sm:p-6">
                       <div className="flex justify-center mb-4">
-                        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg sm:text-xl">
+                        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-zinc-950 to-zinc-700 rounded-full flex items-center justify-center text-white font-bold text-lg sm:text-xl">
                           {testimonial.avatar}
                         </div>
                       </div>
@@ -712,7 +720,7 @@ function App() {
                         <p className="font-semibold text-gray-900 text-sm sm:text-base">
                           {testimonial.name}
                         </p>
-                        <p className="text-xs sm:text-sm text-blue-600 font-medium">
+                        <p className="text-xs sm:text-sm text-zinc-900 font-medium">
                           {testimonial.service}
                         </p>
                         <p className="text-xs sm:text-sm text-gray-500">
@@ -748,19 +756,19 @@ function App() {
                   title: '機電工程',
                   description: '專業驗樓、水錶申請、供水系統等',
                   icon: <Wrench className="w-8 h-8" />,
-                  color: 'from-blue-500 to-blue-600'
+                  color: 'from-zinc-800 to-zinc-950'
                 },
                 {
                   title: '安全服務',
                   description: '安全主任、FIOU審核、密閉空間等',
                   icon: <HardHat className="w-8 h-8" />,
-                  color: 'from-green-500 to-green-600'
+                  color: 'from-zinc-700 to-zinc-900'
                 },
                 {
                   title: '環保服務',
                   description: '環保主任、牌照申請、文件制定等',
                   icon: <Leaf className="w-8 h-8" />,
-                  color: 'from-purple-500 to-purple-600'
+                  color: 'from-zinc-600 to-zinc-800'
                 }
               ].map((category, index) => (
                 <Card key={index} className="hover:shadow-lg transition-all duration-300">
@@ -790,7 +798,7 @@ function App() {
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute top-4 left-4">
-                      <Badge className="bg-white text-blue-600 font-semibold">
+                      <Badge className="bg-white text-zinc-900 font-semibold">
                         {service.category}
                       </Badge>
                     </div>
@@ -798,7 +806,7 @@ function App() {
                   <CardContent className="p-4 sm:p-6">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center space-x-2">
-                        <div className="text-blue-600">
+                        <div className="text-zinc-900">
                           {service.icon}
                         </div>
                         <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
@@ -806,7 +814,7 @@ function App() {
                         </h3>
                       </div>
                       <div className="text-right">
-                        <div className="text-lg sm:text-xl font-bold text-blue-600">
+                        <div className="text-lg sm:text-xl font-bold text-zinc-900">
                           {service.price}
                         </div>
                       </div>
@@ -824,7 +832,7 @@ function App() {
                     </div>
                     <Button 
                       onClick={() => handleSectionChange('booking')}
-                      className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-2 sm:py-3 rounded-lg transition-all duration-300"
+                      className="w-full bg-gradient-to-r from-zinc-950 to-zinc-700 hover:from-black hover:to-zinc-800 text-white py-2 sm:py-3 rounded-lg transition-all duration-300"
                     >
                       立即預約
                       <ArrowRight className="ml-2 w-4 h-4" />
@@ -851,7 +859,7 @@ function App() {
             </div>
 
             <Card className="shadow-xl">
-              <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-6 sm:py-8">
+              <CardHeader className="bg-gradient-to-r from-zinc-950 to-zinc-700 text-white text-center py-6 sm:py-8">
                 <CardTitle className="text-xl sm:text-2xl font-bold flex items-center justify-center">
                   <Calendar className="mr-3 w-6 h-6 sm:w-8 sm:h-8" />
                   服務預約表格
@@ -945,7 +953,7 @@ function App() {
                       value={bookingForm.service}
                       onChange={(e) => handleInputChange('service', e.target.value)}
                       required
-                      className="w-full h-12 px-3 py-2 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full h-12 px-3 py-2 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-transparent"
                     >
                       <option value="">請選擇服務項目</option>
                       {services.map((service) => (
@@ -971,8 +979,8 @@ function App() {
                   </div>
 
                   {/* Process Steps - Mobile Optimized */}
-                  <div className="bg-blue-50 rounded-lg p-4 sm:p-6">
-                    <h3 className="text-base sm:text-lg font-semibold text-blue-800 mb-3 flex items-center">
+                  <div className="bg-zinc-100 rounded-lg p-4 sm:p-6">
+                    <h3 className="text-base sm:text-lg font-semibold text-zinc-800 mb-3 flex items-center">
                       <Clock className="mr-2 w-5 h-5" />
                       預約流程：
                     </h3>
@@ -983,10 +991,10 @@ function App() {
                         '安排專業技術人員上門服務'
                       ].map((step, index) => (
                         <div key={index} className="flex items-center space-x-3">
-                          <div className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
+                          <div className="bg-zinc-900 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold">
                             {index + 1}
                           </div>
-                          <span className="text-sm sm:text-base text-blue-800">{step}</span>
+                          <span className="text-sm sm:text-base text-zinc-800">{step}</span>
                         </div>
                       ))}
                     </div>
@@ -1014,7 +1022,7 @@ function App() {
                   <Button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="w-full h-12 sm:h-14 text-base sm:text-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full h-12 sm:h-14 text-base sm:text-lg bg-gradient-to-r from-zinc-950 to-zinc-700 hover:from-black hover:to-zinc-800 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <>
@@ -1036,17 +1044,17 @@ function App() {
             <div className="mt-8 sm:mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {[
                 {
-                  icon: <Upload className="w-8 sm:w-12 h-8 sm:h-12 text-blue-600" />,
+                  icon: <Upload className="w-8 sm:w-12 h-8 sm:h-12 text-zinc-900" />,
                   title: '免費資詢',
                   description: '各類工程申請，工程工作，聯營合作等'
                 },
                 {
-                  icon: <CreditCard className="w-8 sm:w-12 h-8 sm:h-12 text-blue-600" />,
+                  icon: <CreditCard className="w-8 sm:w-12 h-8 sm:h-12 text-zinc-900" />,
                   title: '彈性收費',
                   description: '可按次收費或按月收費，靈活配合您的需求'
                 },
                 {
-                  icon: <FileText className="w-8 sm:w-12 h-8 sm:h-12 text-blue-600" />,
+                  icon: <FileText className="w-8 sm:w-12 h-8 sm:h-12 text-zinc-900" />,
                   title: '專業文件',
                   description: '提供各類安全環保文件制定及簽發服務'
                 }
@@ -1086,7 +1094,7 @@ function App() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
               {/* Contact Information - Mobile Optimized */}
               <Card className="shadow-lg">
-                <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-6 sm:py-8">
+                <CardHeader className="bg-gradient-to-r from-zinc-950 to-zinc-700 text-white text-center py-6 sm:py-8">
                   <CardTitle className="text-xl sm:text-2xl font-bold">
                     聯絡資訊
                   </CardTitle>
@@ -1094,53 +1102,52 @@ function App() {
                 <CardContent className="p-4 sm:p-6 lg:p-8 space-y-6">
                   {/* Phone */}
                   <div className="flex items-start space-x-4">
-                    <div className="bg-blue-100 p-3 rounded-full">
-                      <Phone className="w-6 h-6 text-blue-600" />
+                    <div className="bg-zinc-100 p-3 rounded-full">
+                      <Phone className="w-6 h-6 text-zinc-900" />
                     </div>
                     <div>
                       <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">電話</h3>
-                      <p className="text-lg sm:text-xl font-bold text-blue-600">+852 6937 4254</p>
-                      <p className="text-sm text-blue-600 font-medium">24小時服務熱線</p>
+                      <p className="text-lg sm:text-xl font-bold text-zinc-900">+852 6937 4254</p>
+                      <p className="text-sm text-zinc-900 font-medium">24小時服務熱線</p>
                     </div>
                   </div>
 
                   {/* Email */}
                   <div className="flex items-start space-x-4">
-                    <div className="bg-blue-100 p-3 rounded-full">
-                      <Mail className="w-6 h-6 text-blue-600" />
+                    <div className="bg-zinc-100 p-3 rounded-full">
+                      <Mail className="w-6 h-6 text-zinc-900" />
                     </div>
                     <div>
                       <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">電郵</h3>
-                      <p className="text-base sm:text-lg text-blue-600 font-medium">proemservice60@gmail.com</p>
-                      <p className="text-base sm:text-lg text-blue-600 font-medium">sales@proemservices60.com</p>
-                      <p className="text-sm text-blue-600 font-medium">專業諮詢信箱</p>
+                      <p className="text-base sm:text-lg text-zinc-900 font-medium">sales@proemservices60.com</p>
+                      <p className="text-sm text-zinc-900 font-medium">專業諮詢信箱</p>
                     </div>
                   </div>
 
                   {/* Address */}
                   <div className="flex items-start space-x-4">
-                    <div className="bg-blue-100 p-3 rounded-full">
-                      <MapPin className="w-6 h-6 text-blue-600" />
+                    <div className="bg-zinc-100 p-3 rounded-full">
+                      <MapPin className="w-6 h-6 text-zinc-900" />
                     </div>
                     <div>
                       <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">地址</h3>
-                      <p className="text-sm sm:text-base text-gray-700">香港九龍觀塘道123號</p>
-                      <p className="text-sm sm:text-base text-gray-700">專業大廈15樓A室</p>
-                      <p className="text-sm text-blue-600 font-medium">歡迎預約到訪</p>
+                      <p className="text-sm sm:text-base text-gray-700">香港上環干諾道西20號</p>
+                      <p className="text-sm sm:text-base text-gray-700">中英大廈1403室</p>
+                      <p className="text-sm text-zinc-900 font-medium">歡迎預約到訪</p>
                     </div>
                   </div>
 
                   {/* Business Hours */}
                   <div className="flex items-start space-x-4">
-                    <div className="bg-blue-100 p-3 rounded-full">
-                      <Clock className="w-6 h-6 text-blue-600" />
+                    <div className="bg-zinc-100 p-3 rounded-full">
+                      <Clock className="w-6 h-6 text-zinc-900" />
                     </div>
                     <div>
                       <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">營業時間</h3>
                       <p className="text-sm sm:text-base text-gray-700">星期一至五：上午9時至下午6時</p>
                       <p className="text-sm sm:text-base text-gray-700">星期六：上午9時至下午1時</p>
                       <p className="text-sm sm:text-base text-gray-700">星期日及公眾假期：休息</p>
-                      <p className="text-sm text-blue-600 font-medium">緊急服務24小時</p>
+                      <p className="text-sm text-zinc-900 font-medium">緊急服務24小時</p>
                     </div>
                   </div>
                 </CardContent>
@@ -1148,7 +1155,7 @@ function App() {
 
               {/* Contact Form - Mobile Optimized */}
               <Card className="shadow-lg">
-                <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-6 sm:py-8">
+                <CardHeader className="bg-gradient-to-r from-zinc-950 to-zinc-700 text-white text-center py-6 sm:py-8">
                   <CardTitle className="text-xl sm:text-2xl font-bold">
                     發送訊息
                   </CardTitle>
@@ -1230,7 +1237,7 @@ function App() {
                     <Button 
                       type="submit"
                       disabled={isContactSubmitting}
-                      className="w-full h-12 sm:h-14 text-base sm:text-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full h-12 sm:h-14 text-base sm:text-lg bg-gradient-to-r from-zinc-950 to-zinc-700 hover:from-black hover:to-zinc-800 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isContactSubmitting ? (
                         <>
@@ -1253,24 +1260,26 @@ function App() {
       )}
 
       {/* Footer - Mobile Optimized */}
-      <footer className="bg-gray-900 text-white py-8 sm:py-12">
+      <footer className="bg-zinc-950 text-white py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {/* Company Info */}
             <div className="text-center sm:text-left">
               <div className="flex items-center justify-center sm:justify-start mb-4">
-                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 rounded-lg">
-                  <Wrench className="h-6 w-6 text-white" />
-                </div>
+                <img
+                  src={companyLogoImg}
+                  alt="匠一機電工程有限公司標誌"
+                  className="h-10 w-10 rounded-full object-cover"
+                />
                 <span className="ml-3 text-lg sm:text-xl font-bold">專業機電服務</span>
               </div>
               <p className="text-sm sm:text-base text-gray-300 mb-4 leading-relaxed">
                 提供專業可靠的機電工程及安全環保服務，致力成為最值得信賴的合作夥伴。
               </p>
               <div className="flex flex-col space-y-2">
-                <div className="text-2xl sm:text-3xl font-bold text-blue-400">800+</div>
+                <div className="text-2xl sm:text-3xl font-bold text-zinc-300">800+</div>
                 <div className="text-sm text-gray-400">完成項目</div>
-                <div className="text-2xl sm:text-3xl font-bold text-blue-400">99%</div>
+                <div className="text-2xl sm:text-3xl font-bold text-zinc-300">99%</div>
                 <div className="text-sm text-gray-400">客戶滿意度</div>
               </div>
             </div>
@@ -1320,9 +1329,9 @@ function App() {
             </div>
           </div>
 
-          <div className="border-t border-gray-700 mt-8 pt-6 text-center">
+          <div className="border-t border-zinc-700 mt-8 pt-6 text-center">
             <p className="text-sm text-gray-400">
-              © 2025 匠一機電工程有限公司，版權所有。
+              © {new Date().getFullYear()} 匠一機電工程有限公司，版權所有。
             </p>
           </div>
         </div>
