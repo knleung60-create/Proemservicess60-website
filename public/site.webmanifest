@@ -1,7 +1,7 @@
 {
-  "name": "專業機電服務 - 香港一站式機電工程解決方案",
-  "short_name": "專業機電服務",
-  "description": "香港專業機電服務公司，提供驗樓、申請水錶、村屋供水、安全服務等一站式機電工程解決方案",
+  "name": "匠一機電工程 - 香港機電、安全及環保服務",
+  "short_name": "匠一機電工程",
+  "description": "香港專業機電、安全及環保服務公司，提供驗樓、水錶申請、村屋供水、WR1、安全審核及環保牌照等服務",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -43,20 +43,6 @@
     "business",
     "utilities",
     "productivity"
-  ],
-  "screenshots": [
-    {
-      "src": "/screenshot-wide.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide"
-    },
-    {
-      "src": "/screenshot-narrow.png",
-      "sizes": "750x1334",
-      "type": "image/png",
-      "form_factor": "narrow"
-    }
   ]
 }
 

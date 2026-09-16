@@ -14,7 +14,7 @@ const allowedOrigins = new Set(
     .map((origin) => origin.trim())
     .filter(Boolean)
 )
-const recipients = (process.env.MAIL_RECIPIENTS || 'sales@proemservices60.com,proemservice60@gmail.com')
+const recipients = (process.env.MAIL_RECIPIENTS || 'sales@proemservices60.com')
   .split(',')
   .map((address) => address.trim())
   .filter(Boolean)

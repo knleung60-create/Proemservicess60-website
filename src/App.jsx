@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button.jsx'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx'
 import { Badge } from '@/components/ui/badge.jsx'
@@ -29,30 +29,74 @@ import {
   AlertTriangle,
   Settings,
   ClipboardCheck,
+  ArrowLeft,
   Menu,
   X
 } from 'lucide-react'
-import mepInspectionImg from './assets/mep-inspection.jpg'
-import waterMeterImg from './assets/water-meter.jpg'
-import villageWaterImg from './assets/hong-kong-village-water-supply.png'
-import saltwaterToiletImg from './assets/saltwater-toilet.jpg'
-import waterSafetyImg from './assets/water-safety.png'
+import mepInspectionImg from './assets/mep-inspection.webp'
+import waterMeterImg from './assets/water-meter.webp'
+import villageWaterImg from './assets/hong-kong-village-water-supply.webp'
+import saltwaterToiletImg from './assets/saltwater-toilet.webp'
+import waterSafetyImg from './assets/water-safety.webp'
 import companyLogoImg from './assets/company-logo.jpeg'
-import safetyEnvironmentalDocumentsImg from './assets/safety-environmental-documents.png'
-import safetyEnvironmentalConsultationImg from './assets/safety-environmental-consultation.png'
-import fiouSafetyAuditImg from './assets/fiou-safety-audit.png'
-import mobileAluminiumScaffoldInspectionImg from './assets/mobile-aluminium-scaffold-inspection.png'
-import confinedSpaceServiceImg from './assets/confined-space-service.png'
-import wr1ElectricalInspectionImg from './assets/wr1-electrical-inspection.png'
-import environmentalPermitApplicationImg from './assets/environmental-permit-application.png'
-import hongKongProfessionalHomeInspectionImg from './assets/hong-kong-professional-home-inspection.png'
-import hongKongPartTimeSafetyEnvironmentalOfficerImg from './assets/hong-kong-part-time-safety-environmental-officer.png'
+import safetyEnvironmentalDocumentsImg from './assets/safety-environmental-documents.webp'
+import safetyEnvironmentalConsultationImg from './assets/safety-environmental-consultation.webp'
+import fiouSafetyAuditImg from './assets/fiou-safety-audit.webp'
+import mobileAluminiumScaffoldInspectionImg from './assets/mobile-aluminium-scaffold-inspection.webp'
+import confinedSpaceServiceImg from './assets/confined-space-service.webp'
+import wr1ElectricalInspectionImg from './assets/wr1-electrical-inspection.webp'
+import environmentalPermitApplicationImg from './assets/environmental-permit-application.webp'
+import hongKongProfessionalHomeInspectionImg from './assets/hong-kong-professional-home-inspection.webp'
+import hongKongPartTimeSafetyEnvironmentalOfficerImg from './assets/hong-kong-part-time-safety-environmental-officer.webp'
 import './App.css'
 
 const enquiryApiUrl = import.meta.env.VITE_ENQUIRY_API_URL || '/api/enquiries'
 
+const sectionPaths = {
+  home: '/',
+  services: '/services',
+  booking: '/booking',
+  contact: '/contact'
+}
+
+const serviceSlugs = {
+  inspection: 'professional-inspection',
+  'water-meter': 'water-meter-application',
+  'village-water': 'village-water-supply',
+  'split-meter': 'water-meter-separation',
+  'saltwater-toilet': 'saltwater-toilet',
+  wr1: 'wr1-certification',
+  'water-safety': 'water-safety-application',
+  'safety-officer': 'part-time-safety-environmental-officer',
+  'fiou-audit': 'fiou-safety-audit',
+  'scaffold-form': 'mobile-aluminium-scaffold-form',
+  'confined-space': 'confined-space-service',
+  'environmental-permits': 'environmental-permit-application',
+  'safety-documents': 'safety-environmental-documents',
+  'safety-meetings': 'safety-environmental-meetings-consultation'
+}
+
+const serviceIdsBySlug = Object.fromEntries(
+  Object.entries(serviceSlugs).map(([id, slug]) => [slug, id])
+)
+
+const getRouteFromPath = (pathname) => {
+  const normalizedPath = pathname.replace(/\/+$/, '') || '/'
+  if (normalizedPath === '/') return { section: 'home', serviceId: null }
+  if (normalizedPath === '/services') return { section: 'services', serviceId: null }
+  if (normalizedPath === '/booking') return { section: 'booking', serviceId: null }
+  if (normalizedPath === '/contact') return { section: 'contact', serviceId: null }
+  const serviceSlug = normalizedPath.match(/^\/services\/([^/]+)$/)?.[1]
+  const serviceId = serviceIdsBySlug[serviceSlug]
+  return serviceId
+    ? { section: 'service-detail', serviceId }
+    : { section: 'home', serviceId: null }
+}
+
 function App() {
-  const [activeSection, setActiveSection] = useState('home')
+  const initialRoute = getRouteFromPath(window.location.pathname)
+  const [activeSection, setActiveSection] = useState(initialRoute.section)
+  const [selectedServiceId, setSelectedServiceId] = useState(initialRoute.serviceId)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [bookingForm, setBookingForm] = useState({
     name: '',
@@ -221,6 +265,97 @@ function App() {
     }
   ]
 
+  const selectedService = services.find((service) => service.id === selectedServiceId)
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const route = getRouteFromPath(window.location.pathname)
+      setActiveSection(route.section)
+      setSelectedServiceId(route.serviceId)
+      window.scrollTo({ top: 0, behavior: 'instant' })
+    }
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  useEffect(() => {
+    const pageUrl = `https://www.proemservices60.com${window.location.pathname}`
+    const metadata = selectedService
+      ? {
+          title: `${selectedService.title}｜香港專業服務｜匠一機電工程`,
+          description: `${selectedService.description}。匠一機電工程為香港住宅、村屋、商業及工程項目提供專業可靠的${selectedService.title}服務。`
+        }
+      : {
+          home: {
+            title: '匠一機電工程｜香港驗樓、水錶申請、安全及環保服務',
+            description: '匠一機電工程有限公司提供香港專業驗樓、申請水錶、村屋供水、WR1、安全主任、環保牌照及密閉空間等服務。'
+          },
+          services: {
+            title: '香港機電、安全及環保服務｜匠一機電工程',
+            description: '瀏覽匠一機電工程的香港機電工程、安全及環保服務，包括驗樓、水錶申請、村屋供水、WR1、FIOU安全審核及環保牌照。'
+          },
+          booking: {
+            title: '預約香港機電工程服務｜匠一機電工程',
+            description: '網上預約匠一機電工程的驗樓、水務、電力、安全及環保專業服務，我們會盡快聯絡確認。'
+          },
+          contact: {
+            title: '聯絡匠一機電工程｜香港機電服務查詢',
+            description: '聯絡匠一機電工程有限公司，查詢香港驗樓、水錶、供水、WR1、安全主任及環保服務。'
+          }
+        }[activeSection]
+
+    document.title = metadata.title
+    document.querySelector('meta[name="description"]')?.setAttribute('content', metadata.description)
+    document.querySelector('link[rel="canonical"]')?.setAttribute('href', pageUrl)
+    document.querySelector('link[rel="alternate"][hreflang="zh-HK"]')?.setAttribute('href', pageUrl)
+    document.querySelector('link[rel="alternate"][hreflang="x-default"]')?.setAttribute('href', pageUrl)
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content', metadata.title)
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', metadata.description)
+    document.querySelector('meta[property="og:url"]')?.setAttribute('content', pageUrl)
+    document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', metadata.title)
+    document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', metadata.description)
+
+    let serviceSchema = document.getElementById('service-schema')
+    if (selectedService) {
+      if (!serviceSchema) {
+        serviceSchema = document.createElement('script')
+        serviceSchema.id = 'service-schema'
+        serviceSchema.type = 'application/ld+json'
+        document.head.appendChild(serviceSchema)
+      }
+      serviceSchema.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'Service',
+            name: selectedService.title,
+            description: selectedService.description,
+            url: pageUrl,
+            areaServed: { '@type': 'AdministrativeArea', name: '香港' },
+            provider: {
+              '@type': 'Electrician',
+              '@id': 'https://www.proemservices60.com/#business',
+              name: '匠一機電工程有限公司',
+              telephone: '+852 6937 4254',
+              email: 'sales@proemservices60.com',
+              url: 'https://www.proemservices60.com/'
+            }
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: '首頁', item: 'https://www.proemservices60.com/' },
+              { '@type': 'ListItem', position: 2, name: '專業服務', item: 'https://www.proemservices60.com/services' },
+              { '@type': 'ListItem', position: 3, name: selectedService.title, item: pageUrl }
+            ]
+          }
+        ]
+      })
+    } else {
+      serviceSchema?.remove()
+    }
+  })
+
   const stats = [
     { number: '800+', label: '完成項目', icon: <Users className="w-6 h-6" /> },
     { number: '99%', label: '客戶滿意度', icon: <Star className="w-6 h-6" /> },
@@ -326,9 +461,25 @@ function App() {
     }))
   }
 
-  const handleSectionChange = (section) => {
+  const navigateTo = (path, section, serviceId = null) => {
+    if (window.location.pathname !== path) window.history.pushState({}, '', path)
     setActiveSection(section)
+    setSelectedServiceId(serviceId)
     setMobileMenuOpen(false)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleSectionChange = (section) => {
+    navigateTo(sectionPaths[section], section)
+  }
+
+  const handleServiceChange = (service) => {
+    navigateTo(`/services/${serviceSlugs[service.id]}`, 'service-detail', service.id)
+  }
+
+  const handleBookService = (service) => {
+    setBookingForm((previous) => ({ ...previous, service: service?.title || previous.service }))
+    handleSectionChange('booking')
   }
 
   return (
@@ -339,7 +490,14 @@ function App() {
           <div className="flex justify-between h-16">
             {/* Logo */}
             <div className="flex items-center">
-              <div className="flex-shrink-0 flex items-center">
+              <a
+                href="/"
+                onClick={(event) => {
+                  event.preventDefault()
+                  handleSectionChange('home')
+                }}
+                className="flex-shrink-0 flex items-center"
+              >
                 <img
                   src={companyLogoImg}
                   alt="匠一機電工程有限公司標誌"
@@ -348,7 +506,7 @@ function App() {
                 <span className="ml-2 sm:ml-3 text-lg sm:text-xl font-bold bg-gradient-to-r from-zinc-950 to-zinc-700 bg-clip-text text-transparent">
                   匠一機電工程有限公司
                 </span>
-              </div>
+              </a>
             </div>
 
             {/* Desktop Navigation */}
@@ -359,17 +517,21 @@ function App() {
                 { key: 'booking', label: '預約服務' },
                 { key: 'contact', label: '聯絡我們' }
               ].map(({ key, label }) => (
-                <button
+                <a
                   key={key}
-                  onClick={() => handleSectionChange(key)}
+                  href={sectionPaths[key]}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    handleSectionChange(key)
+                  }}
                   className={`px-3 lg:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    activeSection === key 
+                    activeSection === key || (key === 'services' && activeSection === 'service-detail')
                       ? 'text-zinc-900 bg-zinc-100 shadow-sm'
                       : 'text-gray-700 hover:text-zinc-900 hover:bg-zinc-100'
                   }`}
                 >
                   {label}
-                </button>
+                </a>
               ))}
             </div>
 
@@ -377,6 +539,7 @@ function App() {
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label={mobileMenuOpen ? '關閉選單' : '開啟選單'}
                 className="p-2 rounded-lg text-gray-700 hover:text-zinc-900 hover:bg-zinc-100 transition-colors"
               >
                 {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -394,17 +557,21 @@ function App() {
                   { key: 'booking', label: '預約服務' },
                   { key: 'contact', label: '聯絡我們' }
                 ].map(({ key, label }) => (
-                  <button
+                  <a
                     key={key}
-                    onClick={() => handleSectionChange(key)}
+                    href={sectionPaths[key]}
+                    onClick={(event) => {
+                      event.preventDefault()
+                      handleSectionChange(key)
+                    }}
                     className={`w-full text-left px-3 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
-                      activeSection === key 
+                      activeSection === key || (key === 'services' && activeSection === 'service-detail')
                         ? 'text-zinc-900 bg-zinc-100 shadow-sm'
                         : 'text-gray-700 hover:text-zinc-900 hover:bg-zinc-100'
                     }`}
                   >
                     {label}
-                  </button>
+                  </a>
                 ))}
               </div>
             </div>
@@ -452,6 +619,8 @@ function App() {
                     <img 
                       src={mepInspectionImg} 
                       alt="專業機電服務" 
+                      fetchPriority="high"
+                      decoding="async"
                       className="rounded-2xl shadow-2xl w-full h-auto"
                     />
                     <div className="absolute -bottom-6 -right-6 bg-white rounded-xl p-4 shadow-lg">
@@ -598,6 +767,8 @@ function App() {
                       <img 
                         src={service.image} 
                         alt={service.title}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute top-4 left-4">
@@ -633,8 +804,18 @@ function App() {
                           </div>
                         ))}
                       </div>
+                      <a
+                        href={`/services/${serviceSlugs[service.id]}`}
+                        onClick={(event) => {
+                          event.preventDefault()
+                          handleServiceChange(service)
+                        }}
+                        className="block text-center text-sm font-semibold text-zinc-800 hover:text-black underline underline-offset-4 mb-3"
+                      >
+                        查看{service.title}詳情
+                      </a>
                       <Button 
-                        onClick={() => handleSectionChange('booking')}
+                        onClick={() => handleBookService(service)}
                         className="w-full bg-gradient-to-r from-zinc-950 to-zinc-700 hover:from-black hover:to-zinc-800 text-white py-2 sm:py-3 rounded-lg transition-all duration-300"
                       >
                         立即預約
@@ -795,6 +976,8 @@ function App() {
                     <img 
                       src={service.image} 
                       alt={service.title}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute top-4 left-4">
@@ -830,8 +1013,18 @@ function App() {
                         </div>
                       ))}
                     </div>
+                    <a
+                      href={`/services/${serviceSlugs[service.id]}`}
+                      onClick={(event) => {
+                        event.preventDefault()
+                        handleServiceChange(service)
+                      }}
+                      className="block text-center text-sm font-semibold text-zinc-800 hover:text-black underline underline-offset-4 mb-3"
+                    >
+                      查看{service.title}詳情
+                    </a>
                     <Button 
-                      onClick={() => handleSectionChange('booking')}
+                      onClick={() => handleBookService(service)}
                       className="w-full bg-gradient-to-r from-zinc-950 to-zinc-700 hover:from-black hover:to-zinc-800 text-white py-2 sm:py-3 rounded-lg transition-all duration-300"
                     >
                       立即預約
@@ -843,6 +1036,142 @@ function App() {
             </div>
           </div>
         </section>
+      )}
+
+      {/* Search-friendly service detail pages */}
+      {activeSection === 'service-detail' && selectedService && (
+        <main className="py-8 sm:py-12 lg:py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav aria-label="麵包屑導覽" className="mb-6 text-sm text-gray-600">
+              <a
+                href="/"
+                onClick={(event) => {
+                  event.preventDefault()
+                  handleSectionChange('home')
+                }}
+                className="hover:text-black"
+              >
+                首頁
+              </a>
+              <span className="mx-2" aria-hidden="true">/</span>
+              <a
+                href="/services"
+                onClick={(event) => {
+                  event.preventDefault()
+                  handleSectionChange('services')
+                }}
+                className="hover:text-black"
+              >
+                專業服務
+              </a>
+              <span className="mx-2" aria-hidden="true">/</span>
+              <span className="text-gray-900" aria-current="page">{selectedService.title}</span>
+            </nav>
+
+            <a
+              href="/services"
+              onClick={(event) => {
+                event.preventDefault()
+                handleSectionChange('services')
+              }}
+              className="inline-flex items-center text-sm font-semibold text-zinc-700 hover:text-black mb-6"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              返回所有服務
+            </a>
+
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-12 lg:mb-16">
+              <div className="overflow-hidden rounded-2xl bg-zinc-100 shadow-lg aspect-[4/3]">
+                <img
+                  src={selectedService.image}
+                  alt={`香港${selectedService.title}服務`}
+                  decoding="async"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <Badge className="bg-zinc-900 text-white mb-4">{selectedService.category}</Badge>
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-950 mb-5 leading-tight">
+                  {selectedService.title}
+                </h1>
+                <p className="text-lg text-gray-600 leading-relaxed mb-6">
+                  {selectedService.description}。匠一機電工程為香港住宅、村屋、商業及工程項目提供專業可靠的服務，按實際情況清楚交代工作範圍、所需文件及跟進程序。
+                </p>
+                <div className="text-2xl font-bold text-zinc-900 mb-6">{selectedService.price}</div>
+                <Button
+                  onClick={() => handleBookService(selectedService)}
+                  className="bg-gradient-to-r from-zinc-950 to-zinc-700 hover:from-black hover:to-zinc-800 text-white px-7 py-6 rounded-lg"
+                >
+                  預約或查詢此服務
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-6 mb-12 lg:mb-16">
+              <Card className="lg:col-span-2">
+                <CardContent className="p-6 sm:p-8">
+                  <h2 className="text-2xl font-bold text-gray-950 mb-5">服務內容</h2>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {selectedService.features.map((feature) => (
+                      <div key={feature} className="flex items-start gap-3 rounded-lg bg-zinc-50 p-4">
+                        <CheckCircle className="w-5 h-5 text-zinc-900 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="bg-zinc-950 text-white">
+                <CardContent className="p-6 sm:p-8">
+                  <h2 className="text-xl font-bold mb-4">一般服務流程</h2>
+                  <ol className="space-y-4">
+                    {['提交查詢及項目資料', '了解現場情況及服務要求', '確認工作範圍及報價', '安排專業人員跟進'].map((step, index) => (
+                      <li key={step} className="flex gap-3">
+                        <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white text-sm font-bold text-zinc-950">
+                          {index + 1}
+                        </span>
+                        <span className="pt-0.5 text-zinc-200">{step}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </CardContent>
+              </Card>
+            </div>
+
+            <section aria-labelledby="related-services-heading">
+              <h2 id="related-services-heading" className="text-2xl font-bold text-gray-950 mb-6">其他相關服務</h2>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {services
+                  .filter((service) => service.id !== selectedService.id)
+                  .slice(0, 3)
+                  .map((service) => (
+                    <a
+                      key={service.id}
+                      href={`/services/${serviceSlugs[service.id]}`}
+                      onClick={(event) => {
+                        event.preventDefault()
+                        handleServiceChange(service)
+                      }}
+                      className="group overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                    >
+                      <img
+                        src={service.image}
+                        alt={service.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="aspect-video w-full object-cover"
+                      />
+                      <div className="p-5">
+                        <h3 className="font-bold text-gray-950 group-hover:underline">{service.title}</h3>
+                        <p className="mt-2 text-sm text-gray-600 line-clamp-2">{service.description}</p>
+                      </div>
+                    </a>
+                  ))}
+              </div>
+            </section>
+          </div>
+        </main>
       )}
 
       {/* Booking Section - Mobile Optimized */}
